@@ -4,7 +4,7 @@ OntoForge is an API gateway and database governance plane designed to validate, 
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 *   **Zero-Copy Branching (DuckDB)**: Spin up isolated sandboxes instantly. Development branches use read-only database views attached to the primary database, consuming virtually zero overhead initially.
 *   **Copy-on-Write (CoW) Materialization**: When an agent executes writes, updates, or table modifications on a sandbox branch, OntoForge drops the corresponding view and materializes the table locally on the branch with the mutated state.
@@ -18,7 +18,7 @@ OntoForge is an API gateway and database governance plane designed to validate, 
 
 ---
 
-## 📐 Architecture & Query Flow
+## Architecture & Query Flow
 
 ```mermaid
 graph TD
@@ -40,7 +40,7 @@ graph TD
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 OntoForge/
@@ -64,7 +64,7 @@ OntoForge/
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 
@@ -91,7 +91,7 @@ CUBEJS_API_SECRET=your_cubejs_secret
 
 ---
 
-## 🧪 Simulation & Academic Benchmarking
+## Simulation & Academic Benchmarking
 
 OntoForge comes with a comprehensive multi-agent simulator that runs concurrent read agents, malicious DDL agents, and branch sandboxing workflows to produce a telemetry benchmark report.
 
@@ -121,7 +121,7 @@ PASSED: ZCBE of 0.984139 satisfies target (>= 0.98)
 
 ---
 
-## 🚦 Core API Endpoints
+## Core API Endpoints
 
 *   `POST /queries`: Execute a SQL query on a specific branch (sent via request body or `X-Branch-Id` header).
 *   `POST /branches`: Create a new zero-copy branch.
