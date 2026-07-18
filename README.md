@@ -31,7 +31,7 @@ graph TD
     BM -->|Branch ID: dev_branch| BranchDB[(Sandbox DuckDB)]
     
     BranchDB -->|Initially| Views[Read-only Views to Primary]
-    BranchDB -->|On Mutation (CoW)| Mat[Materialized Local Table]
+    BranchDB -->|On Mutation CoW| Mat[Materialized Local Table]
     
     API -->|Merge Request| Merge{Any semantic violations?}
     Merge -->|Yes| Reject[Block Merge]
