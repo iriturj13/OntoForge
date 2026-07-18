@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ontoforge-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=ontoforge_metadata
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ontoforge_metadata"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  cubejs:
+    image: cubejs/cube:latest
+    container_name: ontoforge-cubejs
+    ports:
+      - "4000:4000"
+    environment:
+      - CUBEJS_DB_TYPE=postgres
+      - CUBEJS_DB_HOST=postgres
+      - CUBEJS_DB_PORT=5432
+      - CUBEJS_DB_NAME=ontoforge_metadata
+      - CUBEJS_DB_USER=postgres
+      - CUBEJS_DB_PASS=postgres
+      - CUBEJS_API_SECRET=cubejs_secret_token
+      - CUBEJS_DEV_MODE=true
+    volumes:
+      - ./cube/schema:/cube/conf/schema
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4000/cubejs-api/v1/meta || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: ontoforge-api
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=ontoforge_metadata
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - CUBEJS_URL=http://cubejs:4000
+      - CUBEJS_API_SECRET=cubejs_secret_token
+      - DATA_DIR=/app/data
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      cubejs:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  postgres_data:

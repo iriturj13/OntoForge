@@ -1,0 +1,22 @@
+# Environments
+.venv/
+env/
+ENV/
+venv/
+.env
+
+# Python cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases and simulation log data
+data/
+
+# OS files
+.DS_Store
+Thumbs.db
